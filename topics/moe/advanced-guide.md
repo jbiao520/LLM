@@ -14,6 +14,11 @@
 
 $$\text{MoE}(x) = \sum_{i=1}^{n} G(x)_i \cdot E_i(x)$$
 
+**公式解释**
+- **公式含义**：所有专家的输出加权求和，权重由路由器 $G(x)$ 决定。
+- **变量说明**：$n$ 为专家总数；$G(x)_i$ 为第 $i$ 个专家的权重；$E_i(x)$ 为第 $i$ 个专家的输出。
+- **直觉/作用**：不同专家专注于不同类型的输入，路由器决定每个输入应由哪些专家处理。
+
 其中：
 - $n$ 是专家数量
 - $E_i(x)$ 是第 $i$ 个专家的输出
@@ -25,11 +30,21 @@ $$\text{MoE}(x) = \sum_{i=1}^{n} G(x)_i \cdot E_i(x)$$
 
 $$\text{SparseMoE}(x) = \sum_{i \in \text{TopK}(G(x))} G(x)_i \cdot E_i(x)$$
 
+**公式解释**
+- **公式含义**：只取路由分数最高的 $k$ 个专家参与计算，其余权重置零。
+- **变量说明**：$\text{TopK}(G(x))$ 返回路由分数最高的 $k$ 个专家索引；$k$ 通常为 1 或 2。
+- **直觉/作用**：稀疏激活大幅减少计算量，同时保持模型容量。
+
 ## 路由策略
 
 ### 1. Softmax 路由
 
 $$G(x) = \text{Softmax}(x \cdot W_g)$$
+
+**公式解释**
+- **公式含义**：将输入 $x$ 线性映射到 $n$ 维，再经 softmax 得到每个专家的权重。
+- **变量说明**：$W_g \in \mathbb{R}^{d \times n}$ 为路由器权重；$x$ 为输入向量。
+- **直觉/作用**：权重和为 1，可解释为"选择专家的概率分布"。
 
 其中 $W_g \in \mathbb{R}^{d \times n}$ 是路由器的可学习参数。
 
@@ -38,6 +53,11 @@ $$G(x) = \text{Softmax}(x \cdot W_g)$$
 ### 2. Top-K 路由
 
 $$G(x)_i = \begin{cases} \frac{\exp((x \cdot W_g)_i)}{\sum_{j \in \text{TopK}} \exp((x \cdot W_g)_j)} & \text{if } i \in \text{TopK} \\ 0 & \text{otherwise} \end{cases}$$
+
+**公式解释**
+- **公式含义**：只保留 top-k 专家的权重，其余置零，再对保留的权重归一化。
+- **变量说明**：$\text{TopK}$ 为分数最高的 $k$ 个专家集合；$\exp(\cdot)$ 保证权重非负。
+- **直觉/作用**：只激活少数专家，计算量与 $k$ 成正比而非专家总数。
 
 **特点**：
 - 只激活 k 个专家（通常 k=2）
@@ -50,6 +70,11 @@ $$G(x)_i = \begin{cases} \frac{\exp((x \cdot W_g)_i)}{\sum_{j \in \text{TopK}} \
 $$H(x) = x \cdot W_g + \text{StandardNormal}() \cdot \text{Softplus}(x \cdot W_{noise})$$
 
 $$G(x) = \text{Softmax}(\text{TopK}(H(x)))$$
+
+**公式解释**
+- **公式含义**：在路由分数上添加可学习的噪声，增加路由的探索性。
+- **变量说明**：$\text{StandardNormal}()$ 为标准正态采样；$\text{Softplus}(x \cdot W_{noise})$ 控制噪声大小。
+- **直觉/作用**：噪声让路由在训练时探索更多专家组合，避免过早收敛到次优分配。
 
 ## 负载均衡
 
@@ -65,6 +90,11 @@ $$G(x) = \text{Softmax}(\text{TopK}(H(x)))$$
 
 $$L_{aux} = \alpha \cdot n \cdot \sum_{i=1}^{n} f_i \cdot P_i$$
 
+**公式解释**
+- **公式含义**：惩罚专家负载不均衡，鼓励所有专家被均匀使用。
+- **变量说明**：$f_i$ 为实际路由到专家 $i$ 的 token 比例；$P_i$ 为专家 $i$ 的平均路由概率；$\alpha$ 为调节系数。
+- **直觉/作用**：当 $f_i = P_i = 1/n$ 时损失最小，即所有专家被均匀激活。
+
 其中：
 - $f_i$ = 分配给专家 $i$ 的 token 比例
 - $P_i$ = 专家 $i$ 的平均路由概率
@@ -73,6 +103,11 @@ $$L_{aux} = \alpha \cdot n \cdot \sum_{i=1}^{n} f_i \cdot P_i$$
 #### 完整损失
 
 $$L_{total} = L_{task} + L_{aux}$$
+
+**公式解释**
+- **公式含义**：总损失 = 任务损失 + 负载均衡辅助损失。
+- **变量说明**：$L_{task}$ 为目标任务损失（如语言模型损失）；$L_{aux}$ 为负载均衡损失。
+- **直觉/作用**：辅助损失引导路由器��匀使用所有专家，避免"专家坍塌"。
 
 ### 解释
 
@@ -85,6 +120,11 @@ $$L_{total} = L_{task} + L_{aux}$$
 为防止单个专家过载，设置每个专家能处理的最大 token 数：
 
 $$\text{capacity}_i = \frac{N \cdot k}{n} \cdot \text{capacity\_factor}$$
+
+**公式解释**
+- **公式含义**：每个专家的容量 = 总 token 数 × 每个 token 激活的专家数 ÷ 专家总数 × 容量因子。
+- **变量说明**：$N$ 为总 token 数；$k$ 为每个 token 激活的专家数；$n$ 为专家总数。
+- **直觉/作用**：容量因子 > 1 提供缓冲，避免因专家过载而丢弃 token。
 
 超过容量的 token 可能被丢弃或路由到其他专家。
 
