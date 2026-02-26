@@ -12,6 +12,11 @@ Position-wise Feed-Forward Network 是 Transformer 中的关键组件，负责�
 
 $$\text{FFN}(x) = \text{GELU}(xW_1 + b_1)W_2 + b_2$$
 
+**公式解释**
+- **公式含义**：先升维到 $d_{ff}$，经 GELU 激活后再降维回 $d_{model}$。
+- **变量说明**：$x$ 为输入向量；$W_1, W_2$ 为权重矩阵；$b_1, b_2$ 为偏置；GELU 为激活函数。
+- **��觉/作用**：扩展中间维度增加非线性表达能力，是 Transformer 中每个位置的核心变换。
+
 其中：
 - $W_1 \in \mathbb{R}^{d_{model} \times d_{ff}}$
 - $W_2 \in \mathbb{R}^{d_{ff} \times d_{model}}$
@@ -23,6 +28,11 @@ $$\text{FFN}(x) = \text{GELU}(xW_1 + b_1)W_2 + b_2$$
 
 $$\text{FFN}(X)_{i,:} = \text{FFN}(X_{i,:})$$
 
+**公式解释**
+- **公式含义**：序列中每个位置的向量独立通过同一个 FFN 变换。
+- **变量说明**：$X_{i,:}$ 为第 $i$ 个位置的向量；$\text{FFN}(X)_{i,:}$ 为其变换后输出。
+- **直觉/作用**：各位置共享参数但独立处理，保证位置间信息不串扰。
+
 不同位置共享参数，但计算是独立的。
 
 ### 参数量分析
@@ -31,15 +41,30 @@ $$\text{FFN}(X)_{i,:} = \text{FFN}(X_{i,:})$$
 
 $$P_{FFN} = 2 \times d_{model} \times d_{ff} + d_{model} + d_{ff}$$
 
+**公式解释**
+- **公式含义**：FFN 参数量 = 两个权重矩阵 + 两个偏置向量。
+- **变量说明**：$d_{model}$ 为输入/输出维度；$d_{ff}$ 为中间隐藏维度（通常 $4d$）。
+- **直觉/作用**：参数量与维度平方成正比，FFN 约占 Transformer 总参数的 2/3。
+
 对于 $d_{model} = 768$，$d_{ff} = 3072$：
 
 $$P_{FFN} = 2 \times 768 \times 3072 + 768 + 3072 = 4,722,432$$
+
+**公式解释**
+- **公式含义**：代入具体数值计算 BERT-Base 每层 FFN 的参数量。
+- **变量说明**：$768$ 为隐藏维度；$3072 = 4 \times 768$ 为中间维度。
+- **直觉/作用**：约 470 万参数，是 BERT-Base 参数量的重要组成部分。
 
 ## 激活函数选择
 
 ### ReLU
 
 $$\text{FFN}_{ReLU}(x) = \max(0, xW_1)W_2$$
+
+**公式解释**
+- **公式含义**：用 ReLU 激活，将负值截断为 0。
+- **变量说明**：$xW_1$ 为升维后的结果；$\max(0, \cdot)$ 为逐元素 ReLU。
+- **直觉/作用**：计算简单，正区间梯度稳定，是原始 Transformer 的选择。
 
 - 简单高效
 - 原始 Transformer 使用
@@ -48,6 +73,11 @@ $$\text{FFN}_{ReLU}(x) = \max(0, xW_1)W_2$$
 
 $$\text{FFN}_{GELU}(x) = \text{GELU}(xW_1)W_2$$
 
+**公式解释**
+- **公式含义**：用 GELU 替代 ReLU，在 0 附近更平滑。
+- **变量说明**：GELU 为高斯误差线性单元，与正态分布 CDF 相关。
+- **直觉/作用**：平滑过渡避免硬截断，训练更稳定，BERT/GPT 使用。
+
 - 平滑的 ReLU 替代
 - BERT、GPT 使用
 - 性能略好
@@ -55,6 +85,11 @@ $$\text{FFN}_{GELU}(x) = \text{GELU}(xW_1)W_2$$
 ### Swish/SiLU
 
 $$\text{FFN}_{Swish}(x) = (xW_1 \odot \sigma(xW_1))W_2$$
+
+**公式解释**
+- **公式含义**：用 Swish 激活，输入与 sigmoid 门控的乘积。
+- **变量说明**：$\odot$ 为逐元素乘法；$\sigma$ 为 Sigmoid 函数。
+- **直觉/作用**：非单调、有下界无上界，深层网络效果更好。
 
 - 自门控激活
 - 某些模型使用
@@ -65,11 +100,21 @@ $$\text{FFN}_{Swish}(x) = (xW_1 \odot \sigma(xW_1))W_2$$
 
 $$\text{GLU}(x) = (xW) \odot \sigma(xV)$$
 
+**公式解释**
+- **公式含义**：两个并行线性变换，一个作为门控信号控制另一个。
+- **变量说明**：$W, V$ 为两组权重；$\sigma(xV)$ 为门控值（0-1）；$\odot$ 为逐元素乘。
+- **直觉/作用**：门控机制让模型自适应选择哪些信息通过。
+
 包含两个线性变换，一个作为门控。
 
 ### SwiGLU
 
 $$\text{SwiGLU}(x) = \text{Swish}(xW) \odot (xV)$$
+
+**公式解释**
+- **公式含义**：用 Swish 替代 Sigmoid 作为门控激活。
+- **变量说明**：$\text{Swish}(x) = x \cdot \sigma(x)$；$W, V$ 为两组权重。
+- **直觉/作用**：Swish 比 Sigmoid 更平滑，LLaMA 等现代 LLM 采用。
 
 或等价地：
 
@@ -80,6 +125,11 @@ LLaMA 等现代 LLM 使用。
 ### GeGLU
 
 $$\text{GeGLU}(x) = \text{GELU}(xW) \odot (xV)$$
+
+**公式解释**
+- **公式含义**：用 GELU 替代 Sigmoid 作为门控激活。
+- **变量说明**：GELU 为高斯误差线性单元；$W, V$ 为两组权重。
+- **直觉/作用**：GELU 的平滑性带来更好的训练稳定性。
 
 ### 参数量对比
 

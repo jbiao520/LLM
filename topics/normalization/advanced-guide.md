@@ -27,6 +27,11 @@ $$\hat{x}_{i,k} = \frac{x_{i,k} - \mu_k}{\sqrt{\sigma_k^2 + \epsilon}}$$
 
 $$y_{i,k} = \gamma_k \hat{x}_{i,k} + \beta_k$$
 
+**公式解释**
+- **公式含义**：对每个特征维度 $k$，减去 batch 内均值、除以标准差，再缩放平移。
+- **变量说明**：$\mu_k, \sigma_k^2$ 为第 $k$ 维在 batch 内的均值和方差；$\gamma_k, \beta_k$ 为可学习的缩放和偏移参数。
+- **直觉/作用**：将每维特征归一化到标准分布，再通过 $\gamma, \beta$ 恢复表达能力；$\epsilon$ 防止除零。
+
 其中：
 - $\mu_k = \frac{1}{m}\sum_{i=1}^{m} x_{i,k}$（batch 内第 $k$ 维的均值）
 - $\sigma_k^2 = \frac{1}{m}\sum_{i=1}^{m} (x_{i,k} - \mu_k)^2$（batch 内第 $k$ 维的方差）
@@ -43,6 +48,11 @@ $$y_{i,k} = \gamma_k \hat{x}_{i,k} + \beta_k$$
 
 $$\frac{\partial L}{\partial x_i} = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}} \left( \frac{\partial L}{\partial y_i} - \frac{1}{m}\sum_{j=1}^{m}\frac{\partial L}{\partial y_j} - \frac{\hat{x}_i}{m}\sum_{j=1}^{m}\frac{\partial L}{\partial y_j}\hat{x}_j \right)$$
 
+**公式解释**
+- **公式含义**：BatchNorm 反向传播时，梯度不仅依赖自身输出，还与 batch 内所有样本相关。
+- **变量说明**：$m$ 为 batch 大小；$\hat{x}_i$ 为归一化后的值；$\partial L / \partial y_j$ 为上游梯度。
+- **直觉/作用**：归一化操作的梯度会"分散"到整个 batch，增加训练的正规化效果。
+
 ## Layer Normalization
 
 ### 数学定义
@@ -54,6 +64,11 @@ $$\mu = \frac{1}{H}\sum_{i=1}^{H} x_i$$
 $$\sigma^2 = \frac{1}{H}\sum_{i=1}^{H} (x_i - \mu)^2$$
 
 $$y = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}} \odot (x - \mu) + \beta$$
+
+**公式解释**
+- **公式含义**：对单个样本的所有特征维计算均值和方差，然后归一化。
+- **变量说明**：$H$ 为特征维度数；$\mu, \sigma^2$ 为单样本内的统计量；$\gamma, \beta$ 为可学习参数。
+- **直觉/作用**：与 BatchNorm 不同，不依赖 batch 大小，适合序列模型和 NLP 任务。
 
 其中 $H$ 是特征维度数。
 
@@ -92,9 +107,19 @@ $$\text{RMS}(x) = \sqrt{\frac{1}{H}\sum_{i=1}^{H} x_i^2}$$
 
 $$y = \frac{x}{\text{RMS}(x)} \cdot \gamma$$
 
+**公式解释**
+- **公式含义**：只用均方��归一化，省去均值计算，再乘以可学习缩放因子。
+- **变量说明**：$\text{RMS}(x)$ 为均方根值；$\gamma$ 为缩放参数；$H$ 为特征维度数。
+- **直觉/作用**：简化计算但保持归一化效果，LLaMA 等现代 LLM 广泛使用。
+
 或等价地：
 
 $$y = \frac{\gamma}{\sqrt{\frac{1}{H}\sum_{i=1}^{H} x_i^2 + \epsilon}} \cdot x$$
+
+**公式解释**
+- **公式含义**：将 RMSNorm 写成与 LayerNorm 类似的形式，方便对比。
+- **变量说明**：分母是均方根加 $\epsilon$，分子是缩放参数 $\gamma$。
+- **直觉/作用**：与 LayerNorm 的区别在于没有 $(x - \mu)$，即不做中心化。
 
 ### 为什么 RMSNorm 有效？
 
