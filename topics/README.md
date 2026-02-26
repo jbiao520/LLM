@@ -15,7 +15,13 @@ topics/
 ├── encoder/          # 编码器
 ├── decoder/          # 解码器
 ├── ffn/              # 前馈网络层
-└── moe/              # 混合专家模型
+├── moe/              # 混合专家模型
+├── fine-tuning/      # 微调技术
+│   ��── lora-finetune/
+│   └── full-finetune/
+└── inference/        # 推理优化
+    ├── quantization/
+    └── inference-acceleration/
 ```
 
 ## 推荐学习路径
@@ -60,12 +66,24 @@ topics/
    - GPT 架构详解
    - KV Cache 优化
 
-### 第四阶段：进阶主题
+### 第四阶段：进阶主��
 
 8. **[混合专家模型（MoE）](moe/beginner-guide.md)**
    - 稀疏激活原理
    - 路由策略设计
    - 现代大模型的核心技术
+
+### 第五阶段：微调与部署
+
+9. **[微调技术（Fine-tuning）](fine-tuning/README.md)**
+   - LoRA/QLoRA 参数高效微调
+   - 全参数微调
+   - 模��适配特定任务
+
+10. **[推理优化（Inference）](inference/README.md)**
+    - 模型量化（GPTQ、AWQ）
+    - 推理加速（vLLM、KV Cache）
+    - 高效部署大模型
 
 ## 每个模块的内容
 
@@ -75,6 +93,7 @@ topics/
 |------|------|----------|
 | `beginner-guide.md` | 科普版，使用类比和直观解释 | 零基础读者 |
 | `advanced-guide.md` | 深入版，包含数学推导和论文引用 | 有 ML 基础的读者 |
+| `diagram.md` | 流程图解，Mermaid 可视化 | 所有读者 |
 | `examples/` | Python 代码示例，可运行 | 所有读者 |
 
 ## 快速索引
@@ -90,6 +109,8 @@ topics/
 | [Encoder](encoder/) | 双向理解 | BERT |
 | [Decoder](decoder/) | 自回归生成 | GPT |
 | [MoE](moe/) | 高效扩展 | Mixtral, DeepSeek |
+| [Fine-tuning](fine-tuning/) | 模型适配 | 领域定制 |
+| [Inference](inference/) | 高效部署 | 生产环境 |
 
 ### 按模型架构
 

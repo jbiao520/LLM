@@ -42,8 +42,15 @@
 
 ### Requirement: Topic overview documentation
 
-`topics/embedding/` 目录 SHALL 包含 `README.md` 概览文件，介绍模块内容和结构。
+`topics/embedding/` 目录 SHALL 包含 `README.md` 概��文件，介绍模块内容和结构。
 
 #### Scenario: README provides overview
 - **WHEN** 查看 `topics/embedding/README.md`
 - **THEN** 文件包含模块简介、目录结构和学习建议
+
+### Requirement: Embedding Workflow Diagram
+The embedding topic SHALL include a diagram.md file showing the embedding workflow.
+
+#### Scenario: Reader visualizes embedding process
+- **WHEN** reader views topics/embedding/diagram.md
+- **THEN** they see a Mermaid flowchart showing token -> embedding lookup -> position addition -> output flow
