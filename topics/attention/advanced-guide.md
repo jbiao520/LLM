@@ -14,6 +14,9 @@
 
 $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$
 
+<a id="formula-attention-1"></a>
+[📖 查看公式附录详解](#formula-attention-1-detail)
+
 其中：
 - $Q \in \mathbb{R}^{n \times d_k}$（查询）
 - $K \in \mathbb{R}^{m \times d_k}$（键）
@@ -36,6 +39,9 @@ $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)
 除以 $\sqrt{d_k}$ 使方差归一化为 1：
 
 $$\text{Var}\left(\frac{q \cdot k}{\sqrt{d_k}}\right) = \frac{d_k}{d_k} = 1$$
+
+<a id="formula-attention-2"></a>
+[📖 查看公式附录详解](#formula-attention-2-detail)
 
 **公式解释**
 - **公式含义**：缩放后的点积方差被归一到 1。
@@ -73,6 +79,9 @@ $$\text{Var}\left(\frac{q \cdot k}{\sqrt{d_k}}\right) = \frac{d_k}{d_k} = 1$$
 
 $$Q = XW^Q, \quad K = XW^K, \quad V = XW^V$$
 
+<a id="formula-attention-3"></a>
+[📖 查看公式附录详解](#formula-attention-3-detail)
+
 其中 $W^Q, W^K, W^V$ 是可学习的投影矩阵。
 
 **公式解释**
@@ -92,9 +101,15 @@ $$Q = XW^Q, \quad K = XW^K, \quad V = XW^V$$
 
 $$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, ..., \text{head}_h)W^O$$
 
+<a id="formula-attention-4"></a>
+[📖 查看公式附录详解](#formula-attention-4-detail)
+
 其中：
 
 $$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
+
+<a id="formula-attention-5"></a>
+[📖 查看公式附录详解](#formula-attention-5-detail)
 
 **公式解释**
 - **公式含义**：将注意力分成 $h$ 个子空间并行计算，最后拼接并线性映射。
@@ -128,6 +143,9 @@ $$\text{head}_i = \text{Attention}(QW_i^Q, KW_i^K, VW_i^V)$$
 
 $$S_{ij} = \begin{cases} S_{ij} & \text{if } j \text{ is valid} \\ -\infty & \text{if } j \text{ is padding} \end{cases}$$
 
+<a id="formula-attention-6"></a>
+[📖 查看公式附录详解](#formula-attention-6-detail)
+
 **公式解释**
 - **公式含义**：对 padding 位置施加 $-\infty$，使 softmax 后权重变为 0。
 - **变量说明**：$S_{ij}$ 为注意力分数；$j$ 为被关注位置。
@@ -139,7 +157,13 @@ $$S_{ij} = \begin{cases} S_{ij} & \text{if } j \text{ is valid} \\ -\infty & \te
 
 $$M_{ij} = \begin{cases} 0 & \text{if } j \leq i \\ -\infty & \text{if } j > i \end{cases}$$
 
+<a id="formula-attention-7"></a>
+[📖 查看公式附录详解](#formula-attention-7-detail)
+
 $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}} + M\right)V$$
+
+<a id="formula-attention-8"></a>
+[📖 查看公式附录详解](#formula-attention-8-detail)
 
 **公式解释**
 - **公式含义**：用掩码 $M$ 把未来位置的注意力分数置为 $-\infty$，保证因果性。
@@ -151,6 +175,9 @@ $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}} + M\ri
 编码器-解码器注意力中，Query 来自解码器，Key 和 Value 来自编码器：
 
 $$Q = X_{dec}W^Q, \quad K = X_{enc}W^K, \quad V = X_{enc}W^V$$
+
+<a id="formula-attention-9"></a>
+[📖 查看公式附录详解](#formula-attention-9-detail)
 
 这让解码器可以"查看"编码器的输出。
 
@@ -227,3 +254,4 @@ with torch.cuda.amp.autocast(enabled=False):
 2. Dao et al. (2022). *FlashAttention: Fast and Memory-Efficient Exact Attention*
 3. Child et al. (2019). *Generating Long Sequences with Sparse Transformers*
 4. Shazeer (2019). *Fast Transformer Decoding: One Write-Head is All You Need*
+

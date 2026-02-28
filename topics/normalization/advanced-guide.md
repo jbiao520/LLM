@@ -25,7 +25,13 @@
 
 $$\hat{x}_{i,k} = \frac{x_{i,k} - \mu_k}{\sqrt{\sigma_k^2 + \epsilon}}$$
 
+<a id="formula-normalization-1"></a>
+[📖 查看公式附录详解](#formula-normalization-1-detail)
+
 $$y_{i,k} = \gamma_k \hat{x}_{i,k} + \beta_k$$
+
+<a id="formula-normalization-2"></a>
+[📖 查看公式附录详解](#formula-normalization-2-detail)
 
 **公式解释**
 - **公式含义**：对每个特征维度 $k$，减去 batch 内均值、除以标准差，再缩放平移。
@@ -48,6 +54,9 @@ $$y_{i,k} = \gamma_k \hat{x}_{i,k} + \beta_k$$
 
 $$\frac{\partial L}{\partial x_i} = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}} \left( \frac{\partial L}{\partial y_i} - \frac{1}{m}\sum_{j=1}^{m}\frac{\partial L}{\partial y_j} - \frac{\hat{x}_i}{m}\sum_{j=1}^{m}\frac{\partial L}{\partial y_j}\hat{x}_j \right)$$
 
+<a id="formula-normalization-3"></a>
+[📖 查看公式附录详解](#formula-normalization-3-detail)
+
 **公式解释**
 - **公式含义**：BatchNorm 反向传播时，梯度不仅依赖自身输出，还与 batch 内所有样本相关。
 - **变量说明**：$m$ 为 batch 大小；$\hat{x}_i$ 为归一化后的值；$\partial L / \partial y_j$ 为上游梯度。
@@ -61,9 +70,18 @@ $$\frac{\partial L}{\partial x_i} = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}} \l
 
 $$\mu = \frac{1}{H}\sum_{i=1}^{H} x_i$$
 
+<a id="formula-normalization-4"></a>
+[📖 查看公式附录详解](#formula-normalization-4-detail)
+
 $$\sigma^2 = \frac{1}{H}\sum_{i=1}^{H} (x_i - \mu)^2$$
 
+<a id="formula-normalization-5"></a>
+[📖 查看公式附录详解](#formula-normalization-5-detail)
+
 $$y = \frac{\gamma}{\sqrt{\sigma^2 + \epsilon}} \odot (x - \mu) + \beta$$
+
+<a id="formula-normalization-6"></a>
+[📖 查看公式附录详解](#formula-normalization-6-detail)
 
 **公式解释**
 - **公式含义**：对单个样本的所有特征维计算均值和方差，然后归一化。
@@ -105,7 +123,13 @@ RMSNorm 简化了 LayerNorm，去掉了均值中心化：
 
 $$\text{RMS}(x) = \sqrt{\frac{1}{H}\sum_{i=1}^{H} x_i^2}$$
 
+<a id="formula-normalization-7"></a>
+[📖 查看公式附录详解](#formula-normalization-7-detail)
+
 $$y = \frac{x}{\text{RMS}(x)} \cdot \gamma$$
+
+<a id="formula-normalization-8"></a>
+[📖 查看公式附录详解](#formula-normalization-8-detail)
 
 **公式解释**
 - **公式含义**：只用均方��归一化，省去均值计算，再乘以可学习缩放因子。
@@ -115,6 +139,9 @@ $$y = \frac{x}{\text{RMS}(x)} \cdot \gamma$$
 或等价地：
 
 $$y = \frac{\gamma}{\sqrt{\frac{1}{H}\sum_{i=1}^{H} x_i^2 + \epsilon}} \cdot x$$
+
+<a id="formula-normalization-9"></a>
+[📖 查看公式附录详解](#formula-normalization-9-detail)
 
 **公式解释**
 - **公式含义**：将 RMSNorm 写成与 LayerNorm 类似的形式，方便对比。
@@ -172,3 +199,4 @@ $\epsilon$ 的作用是防止除零错误，但也影响数值精度：
 2. Ba et al. (2016). *Layer Normalization*
 3. Zhang & Sennrich (2019). *Root Mean Square Layer Normalization*
 4. Xiong et al. (2020). *On Layer Normalization in the Transformer Architecture*
+

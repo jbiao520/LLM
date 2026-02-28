@@ -19,6 +19,9 @@ Transformer 编码器是一种双向序列建模架构，通过自注意力机�
 
 $$\text{Output} = \text{LayerNorm}(x + \text{Sublayer}(x))$$
 
+<a id="formula-encoder-1"></a>
+[📖 查看公式附录详解](#formula-encoder-1-detail)
+
 **公式解释**
 - **公式含义**：残差连接将输入 $x$ 与子层输出相加，再通过层归一化得到最终输出。
 - **变量说明**：$x$ 为子层输入；$\text{Sublayer}(x)$ 为注意力或前馈网络的输出；$\text{LayerNorm}$ 为层归一化操作。
@@ -31,6 +34,9 @@ $$\text{Output} = \text{LayerNorm}(x + \text{Sublayer}(x))$$
 **子层 1：Multi-Head Self-Attention**
 $$Z = \text{LayerNorm}(X + \text{MultiHead}(X, X, X))$$
 
+<a id="formula-encoder-2"></a>
+[📖 查看公式附录详解](#formula-encoder-2-detail)
+
 **公式解释**
 - **公式含义**：对输入 $X$ 做多头自注意力，加残差后再做层归一化。
 - **变量说明**：$X$ 为输入序列；$\text{MultiHead}$ 为多头注意力；$Z$ 为子层输出。
@@ -39,6 +45,9 @@ $$Z = \text{LayerNorm}(X + \text{MultiHead}(X, X, X))$$
 **子层 2：Feed-Forward Network**
 $$Y = \text{LayerNorm}(Z + \text{FFN}(Z))$$
 
+<a id="formula-encoder-3"></a>
+[📖 查看公式附录详解](#formula-encoder-3-detail)
+
 **公式解释**
 - **公式含义**：对注意力输出 $Z$ 做前馈网络变换，加残差后再层归一化。
 - **变量说明**：$Z$ 为上一层输出；$\text{FFN}$ 为逐位置前馈网络；$Y$ 为最终层输出。
@@ -46,6 +55,9 @@ $$Y = \text{LayerNorm}(Z + \text{FFN}(Z))$$
 
 其中 FFN 定义为：
 $$\text{FFN}(x) = \text{GELU}(xW_1 + b_1)W_2 + b_2$$
+
+<a id="formula-encoder-4"></a>
+[📖 查看公式附录详解](#formula-encoder-4-detail)
 
 **公式解释**
 - **公式含义**：先升维再做 GELU 激活，最后降维回原维度。
@@ -80,6 +92,9 @@ Pre-LN 的梯度可以直接通过残差路径流向任何层：
 
 $$\frac{\partial L}{\partial x_l} = \frac{\partial L}{\partial x_L} + \sum_{i=l}^{L-1} \frac{\partial L}{\partial f_i}$$
 
+<a id="formula-encoder-5"></a>
+[📖 查看公式附录详解](#formula-encoder-5-detail)
+
 **公式解释**
 - **公式含义**：第 $l$ 层的梯度等于最后一层直接传回的梯度加上中间各子层的梯度贡献。
 - **变量说明**：$x_l$ 为第 $l$ 层输入；$L$ 为总层数；$f_i$ 为第 $i$ 个子层变换。
@@ -94,7 +109,13 @@ $$\frac{\partial L}{\partial x_l} = \frac{\partial L}{\partial x_L} + \sum_{i=l}
 ### Sinusoidal（原始）
 
 $$PE_{(pos, 2i)} = \sin(pos / 10000^{2i/d})$$
+
+<a id="formula-encoder-6"></a>
+[📖 查看公式附录详解](#formula-encoder-6-detail)
 $$PE_{(pos, 2i+1)} = \cos(pos / 10000^{2i/d})$$
+
+<a id="formula-encoder-7"></a>
+[📖 查看公式附录详解](#formula-encoder-7-detail)
 
 **公式解释**
 - **公式含义**：偶数维度用正弦、奇数维度用余弦编码位置信息。
@@ -122,6 +143,9 @@ BERT 是一个多层的 Transformer 编码器：
 
 $$\text{Input} = \text{Token Embedding} + \text{Segment Embedding} + \text{Position Embedding}$$
 
+<a id="formula-encoder-8"></a>
+[📖 查看公式附录详解](#formula-encoder-8-detail)
+
 **公式解释**
 - **公式含义**：BERT 输入由三种嵌入相加得到：词嵌入、句子嵌入、位置嵌入。
 - **变量说明**：Token Embedding 表示词本身；Segment Embedding 区分句子对；Position Embedding 编码位置。
@@ -145,6 +169,9 @@ $$\text{Input} = \text{Token Embedding} + \text{Segment Embedding} + \text{Posit
 
 $$P(mask\_token | context) = \text{softmax}(h \cdot E^T)$$
 
+<a id="formula-encoder-9"></a>
+[📖 查看公式附录详解](#formula-encoder-9-detail)
+
 **公式解释**
 - **公式含义**：用 `[MASK]` 位置的隐藏状态 $h$ 与词嵌入矩阵 $E$ 计算相似度，再用 softmax 得到词概率分布。
 - **变量说明**：$h$ 为 `[MASK]` 位置的表示向量；$E$ 为词嵌入矩阵；$E^T$ 为其转置。
@@ -157,6 +184,9 @@ $$P(mask\_token | context) = \text{softmax}(h \cdot E^T)$$
 判断两个句子是否连续：
 
 $$P(isNext) = \text{sigmoid}(h_{[CLS]} \cdot w)$$
+
+<a id="formula-encoder-10"></a>
+[📖 查看公式附录详解](#formula-encoder-10-detail)
 
 **公式解释**
 - **公式含义**：用 `[CLS]` 位置的隐藏状态做二分类，判断两句子是否连续。
@@ -181,6 +211,9 @@ $$P(isNext) = \text{sigmoid}(h_{[CLS]} \cdot w)$$
 
 $$h_i = f(x_1, x_2, ..., x_n)$$
 
+<a id="formula-encoder-11"></a>
+[📖 查看公式附录详解](#formula-encoder-11-detail)
+
 **公式解释**
 - **公式含义**：编码器中每个位置的表示都依赖全序列信息。
 - **变量说明**：$h_i$ 为位置 $i$ 的输出表示；$x_1, ..., x_n$ 为序列所有位置的输入。
@@ -203,6 +236,9 @@ $$h_i = f(x_1, x_2, ..., x_n)$$
 在 BERT 中，词嵌入矩阵和输出分类器共享：
 
 $$\text{MLM\_logits} = h \cdot E^T + b$$
+
+<a id="formula-encoder-12"></a>
+[📖 查看公式附录详解](#formula-encoder-12-detail)
 
 **公式解释**
 - **公式含义**：预测被遮盖词时，直接复用输入词嵌入矩阵作为输出投影。
@@ -248,3 +284,4 @@ Dropout 率通常为 0.1。
 3. Liu et al. (2019). *RoBERTa: A Robustly Optimized BERT Pretraining Approach*
 4. Lan et al. (2019). *ALBERT: A Lite BERT for Self-supervised Learning*
 5. He et al. (2020). *DeBERTa: Decoding-enhanced BERT with Disentangled Attention*
+

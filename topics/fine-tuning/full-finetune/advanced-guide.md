@@ -8,6 +8,9 @@
 
 $$W_{ft} = W_{pre} - \eta \sum_{t=1}^{T} \nabla_{W} \mathcal{L}(f_{W_{pre}}(x_t), y_t)$$
 
+<a id="formula-full-finetune-1"></a>
+[📖 查看公式附录详解](#formula-full-finetune-1-detail)
+
 **公式解释**
 - **公式含义**：从预训练权重出发，用目标任务数据做梯度下降更新所有参数。
 - **变量说明**：$W_{pre}$ 为预训练权重；$\eta$ 为学习率；$\mathcal{L}$ 为损失函数；$T$ 为训练步数。
@@ -103,6 +106,9 @@ model.gradient_checkpointing_enable()
 
 $$\text{Forgetting} = \text{Perf}_{pre}(T_{orig}) - \text{Perf}_{ft}(T_{orig})$$
 
+<a id="formula-full-finetune-2"></a>
+[📖 查看公式附录详解](#formula-full-finetune-2-detail)
+
 **公式解释**
 - **公式含义**：遗忘量 = 预训练模型在原任务上的性能 - 微调后在原任务上的性能。
 - **变量说明**：$\text{Perf}_{pre}$ 为预训练模型性能；$\text{Perf}_{ft}$ 为微调后模型性能；$T_{orig}$ 为原任务。
@@ -185,6 +191,9 @@ training_args = TrainingArguments(
 
 $$\text{Memory} \approx 4 \times \text{Params} \times \text{Bytes}$$
 
+<a id="formula-full-finetune-3"></a>
+[📖 查看公式附录详解](#formula-full-finetune-3-detail)
+
 **公式解释**
 - **公式含义**：全参数微调显存约为模型参数的 4 倍（以同精度计）。
 - **变量说明**：$\text{Params}$ 为参数数量；$\text{Bytes}$ 为每个数值的字节数（如 FP16 为 2）。
@@ -228,3 +237,4 @@ $$\text{Memory} \approx 4 \times \text{Params} \times \text{Bytes}$$
 1. Howard & Ruder (2018). *Universal Language Model Fine-tuning for Text Classification*
 2. Kirkpatrick et al. (2017). *Overcoming catastrophic forgetting in neural networks*
 3. Ouyang et al. (2022). *Training language models to follow instructions with human feedback*
+

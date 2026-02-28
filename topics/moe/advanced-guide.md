@@ -14,6 +14,9 @@
 
 $$\text{MoE}(x) = \sum_{i=1}^{n} G(x)_i \cdot E_i(x)$$
 
+<a id="formula-moe-1"></a>
+[📖 查看公式附录详解](#formula-moe-1-detail)
+
 **公式解释**
 - **公式含义**：所有专家的输出加权求和，权重由路由器 $G(x)$ 决定。
 - **变量说明**：$n$ 为专家总数；$G(x)_i$ 为第 $i$ 个专家的权重；$E_i(x)$ 为第 $i$ 个专家的输出。
@@ -30,6 +33,9 @@ $$\text{MoE}(x) = \sum_{i=1}^{n} G(x)_i \cdot E_i(x)$$
 
 $$\text{SparseMoE}(x) = \sum_{i \in \text{TopK}(G(x))} G(x)_i \cdot E_i(x)$$
 
+<a id="formula-moe-2"></a>
+[📖 查看公式附录详解](#formula-moe-2-detail)
+
 **公式解释**
 - **公式含义**：只取路由分数最高的 $k$ 个专家参与计算，其余权重置零。
 - **变量说明**：$\text{TopK}(G(x))$ 返回路由分数最高的 $k$ 个专家索引；$k$ 通常为 1 或 2。
@@ -40,6 +46,9 @@ $$\text{SparseMoE}(x) = \sum_{i \in \text{TopK}(G(x))} G(x)_i \cdot E_i(x)$$
 ### 1. Softmax 路由
 
 $$G(x) = \text{Softmax}(x \cdot W_g)$$
+
+<a id="formula-moe-3"></a>
+[📖 查看公式附录详解](#formula-moe-3-detail)
 
 **公式解释**
 - **公式含义**：将输入 $x$ 线性映射到 $n$ 维，再经 softmax 得到每个专家的权重。
@@ -53,6 +62,9 @@ $$G(x) = \text{Softmax}(x \cdot W_g)$$
 ### 2. Top-K 路由
 
 $$G(x)_i = \begin{cases} \frac{\exp((x \cdot W_g)_i)}{\sum_{j \in \text{TopK}} \exp((x \cdot W_g)_j)} & \text{if } i \in \text{TopK} \\ 0 & \text{otherwise} \end{cases}$$
+
+<a id="formula-moe-4"></a>
+[📖 查看公式附录详解](#formula-moe-4-detail)
 
 **公式解释**
 - **公式含义**：只保留 top-k 专家的权重，其余置零，再对保留的权重归一化。
@@ -69,7 +81,13 @@ $$G(x)_i = \begin{cases} \frac{\exp((x \cdot W_g)_i)}{\sum_{j \in \text{TopK}} \
 
 $$H(x) = x \cdot W_g + \text{StandardNormal}() \cdot \text{Softplus}(x \cdot W_{noise})$$
 
+<a id="formula-moe-5"></a>
+[📖 查看公式附录详解](#formula-moe-5-detail)
+
 $$G(x) = \text{Softmax}(\text{TopK}(H(x)))$$
+
+<a id="formula-moe-6"></a>
+[📖 查看公式附录详解](#formula-moe-6-detail)
 
 **公式解释**
 - **公式含义**：在路由分数上添加可学习的噪声，增加路由的探索性。
@@ -90,6 +108,9 @@ $$G(x) = \text{Softmax}(\text{TopK}(H(x)))$$
 
 $$L_{aux} = \alpha \cdot n \cdot \sum_{i=1}^{n} f_i \cdot P_i$$
 
+<a id="formula-moe-7"></a>
+[📖 查看公式附录详解](#formula-moe-7-detail)
+
 **公式解释**
 - **公式含义**：惩罚专家负载不均衡，鼓励所有专家被均匀使用。
 - **变量说明**：$f_i$ 为实际路由到专家 $i$ 的 token 比例；$P_i$ 为专家 $i$ 的平均路由概率；$\alpha$ 为调节系数。
@@ -103,6 +124,9 @@ $$L_{aux} = \alpha \cdot n \cdot \sum_{i=1}^{n} f_i \cdot P_i$$
 #### 完整损失
 
 $$L_{total} = L_{task} + L_{aux}$$
+
+<a id="formula-moe-8"></a>
+[📖 查看公式附录详解](#formula-moe-8-detail)
 
 **公式解释**
 - **公式含义**：总损失 = 任务损失 + 负载均衡辅助损失。
@@ -120,6 +144,9 @@ $$L_{total} = L_{task} + L_{aux}$$
 为防止单个专家过载，设置每个专家能处理的最大 token 数：
 
 $$\text{capacity}_i = \frac{N \cdot k}{n} \cdot \text{capacity\_factor}$$
+
+<a id="formula-moe-9"></a>
+[📖 查看公式附录详解](#formula-moe-9-detail)
 
 **公式解释**
 - **公式含义**：每个专家的容量 = 总 token 数 × 每个 token 激活的专家数 ÷ 专家总数 × 容量因子。
@@ -214,3 +241,4 @@ for i in range(num_experts):
 3. Fedus et al. (2021). *Switch Transformers: Scaling to Trillion Parameter Models*
 4. Jiang et al. (2024). *Mixtral of Experts*
 5. Dai et al. (2024). *DeepSeekMoE: Towards Ultimate Expert Specialization in Mixture-of-Experts Language Models*
+

@@ -8,6 +8,9 @@ LoRA (Low-Rank Adaptation) 是一种参数高效微调方法，通过低秩分�
 
 $$W = W_0 + \Delta W = W_0 + BA$$
 
+<a id="formula-lora-finetune-1"></a>
+[📖 查看公式附录详解](#formula-lora-finetune-1-detail)
+
 **公式解释**
 - **公式含义**：冻结原权重 $W_0$，新增两个低秩矩阵 $B$ 和 $A$ 的乘积来表示权重更新。
 - **变量说明**：$W_0$ 为预训练权重（冻结）；$B \in \mathbb{R}^{d \times r}$ 为降维矩阵；$A \in \mathbb{R}^{r \times k}$ 为升维矩阵；$r$ 为秩。
@@ -29,6 +32,9 @@ Aghajanyan et al. (2020) 发现，只需在子空间中优化少量参数就能�
 
 $$\Delta W = BA$$
 
+<a id="formula-lora-finetune-2"></a>
+[📖 查看公式附录详解](#formula-lora-finetune-2-detail)
+
 其中：
 - $B \in \mathbb{R}^{d \times r}$：降维矩阵，初始化为随机高斯
 - $A \in \mathbb{R}^{r \times k}$：升维矩阵，初始化为零
@@ -38,6 +44,9 @@ $$\Delta W = BA$$
 ### 前向传播
 
 $$h = W_0 x + \frac{\alpha}{r} BAx$$
+
+<a id="formula-lora-finetune-3"></a>
+[📖 查看公式附录详解](#formula-lora-finetune-3-detail)
 
 **公式解释**
 - **公式含义**：输出 = 冻结权重的输出 + LoRA 更新的输出（带缩放因子）。
@@ -76,6 +85,9 @@ $$h = W_0 x + \frac{\alpha}{r} BAx$$
 缩放因子 $\alpha$ 控制 LoRA 更新的强度：
 
 $$\text{effective\_lr} \propto \frac{\alpha}{r} \times \text{learning\_rate}$$
+
+<a id="formula-lora-finetune-4"></a>
+[📖 查看公式附录详解](#formula-lora-finetune-4-detail)
 
 常见设置：
 - $\alpha = 2r$（保守）
@@ -143,6 +155,9 @@ lora_dropout = 0.05  # 常用值
 
 $$W_{merged} = W_0 + \frac{\alpha}{r} BA$$
 
+<a id="formula-lora-finetune-5"></a>
+[📖 查看公式附录详解](#formula-lora-finetune-5-detail)
+
 **公式解释**
 - **公式含义**：将 LoRA 的低秩更新合并到原权重，得到新的完整权重矩阵。
 - **变量说明**：$W_0$ 为预训练权重；$B, A$ 为训练后的 LoRA 矩阵；$\alpha/r$ 为缩放因子。
@@ -198,3 +213,4 @@ lora_config = LoraConfig(
 1. Hu et al. (2021). *LoRA: Low-Rank Adaptation of Large Language Models*
 2. Dettmers et al. (2023). *QLoRA: Efficient Finetuning of Quantized LLMs*
 3. Aghajanyan et al. (2020). *Intrinsic Dimensionality Explains the Effectiveness of Language Model Fine-Tuning*
+

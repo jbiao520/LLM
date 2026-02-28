@@ -22,9 +22,18 @@ Transformer 解码器是自回归生成模型的核心，通过因果注意力�
 
 $$h_l' = \text{LayerNorm}(h_{l-1} + \text{MaskedMHSA}(h_{l-1}))$$
 
+<a id="formula-decoder-1"></a>
+[📖 查看公式附录详解](#formula-decoder-1-detail)
+
 $$h_l'' = \text{LayerNorm}(h_l' + \text{CrossAttention}(h_l', c))$$
 
+<a id="formula-decoder-2"></a>
+[📖 查看公式附录详解](#formula-decoder-2-detail)
+
 $$h_l = \text{LayerNorm}(h_l'' + \text{FFN}(h_l''))$$
+
+<a id="formula-decoder-3"></a>
+[📖 查看公式附录详解](#formula-decoder-3-detail)
 
 其中 $c$ 是编码器的输出。
 
@@ -41,9 +50,15 @@ $$h_l = \text{LayerNorm}(h_l'' + \text{FFN}(h_l''))$$
 
 $$M_{ij} = \begin{cases} 0 & \text{if } j \leq i \\ -\infty & \text{if } j > i \end{cases}$$
 
+<a id="formula-decoder-4"></a>
+[📖 查看公式附录详解](#formula-decoder-4-detail)
+
 注意力计算：
 
 $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}} + M\right)V$$
+
+<a id="formula-decoder-5"></a>
+[📖 查看公式附录详解](#formula-decoder-5-detail)
 
 **公式解释**
 - **公式含义**：用掩码 $M$ 把未来位置的注意力分数设为 $-\infty$，softmax 后权重为 0。
@@ -55,6 +70,9 @@ $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}} + M\ri
 对于一个长度为 4 的序列：
 
 $$M = \begin{bmatrix} 0 & -\infty & -\infty & -\infty \\ 0 & 0 & -\infty & -\infty \\ 0 & 0 & 0 & -\infty \\ 0 & 0 & 0 & 0 \end{bmatrix}$$
+
+<a id="formula-decoder-6"></a>
+[📖 查看公式附录详解](#formula-decoder-6-detail)
 
 经过 softmax 后，$-\infty$ 位置变为 0。
 
@@ -71,6 +89,9 @@ $$M = \begin{bmatrix} 0 & -\infty & -\infty & -\infty \\ 0 & 0 & -\infty & -\inf
 
 $$P(x_{t+1} | x_{1:t}) = \text{softmax}(Wh_t)$$
 
+<a id="formula-decoder-7"></a>
+[📖 查看公式附录详解](#formula-decoder-7-detail)
+
 其中 $h_t$ 是位置 $t$ 的隐藏状态。
 
 **公式解释**
@@ -82,6 +103,9 @@ $$P(x_{t+1} | x_{1:t}) = \text{softmax}(Wh_t)$$
 
 $$P(x_1, ..., x_T) = \prod_{t=1}^{T} P(x_t | x_{1:t-1})$$
 
+<a id="formula-decoder-8"></a>
+[📖 查看公式附录详解](#formula-decoder-8-detail)
+
 **公式解释**
 - **公式含义**：整句概率等于每一步条件概率的连乘。
 - **变量说明**：$T$ 为序列长度；$x_{1:t-1}$ 为历史上下文。
@@ -92,6 +116,9 @@ $$P(x_1, ..., x_T) = \prod_{t=1}^{T} P(x_t | x_{1:t-1})$$
 #### Greedy Decoding
 
 $$x_{t+1} = \arg\max_{x} P(x | x_{1:t})$$
+
+<a id="formula-decoder-9"></a>
+[📖 查看公式附录详解](#formula-decoder-9-detail)
 
 **公式解释**
 - **公式含义**：每一步都选取概率最高的 token。
@@ -106,6 +133,9 @@ $$x_{t+1} = \arg\max_{x} P(x | x_{1:t})$$
 
 $$x_{t+1} \sim P(x | x_{1:t})$$
 
+<a id="formula-decoder-10"></a>
+[📖 查看公式附录详解](#formula-decoder-10-detail)
+
 **公式解释**
 - **公式含义**：按照概率分布随机采样下一个 token。
 - **变量说明**：$\sim$ 表示“服从该分布采样”。
@@ -114,6 +144,9 @@ $$x_{t+1} \sim P(x | x_{1:t})$$
 #### Temperature Sampling
 
 $$P_{temp}(x | x_{1:t}) = \frac{\exp(\log P(x) / T)}{\sum_{x'} \exp(\log P(x') / T)}$$
+
+<a id="formula-decoder-11"></a>
+[📖 查看公式附录详解](#formula-decoder-11-detail)
 
 - $T > 1$：更随机
 - $T < 1$：更确定
@@ -135,7 +168,13 @@ $$P_{temp}(x | x_{1:t}) = \frac{\exp(\log P(x) / T)}{\sum_{x'} \exp(\log P(x') /
 缓存之前计算过的 K 和 V：
 
 $$K_{1:t} = [K_1, K_2, ..., K_t]$$
+
+<a id="formula-decoder-12"></a>
+[📖 查看公式附录详解](#formula-decoder-12-detail)
 $$V_{1:t} = [V_1, V_2, ..., V_t]$$
+
+<a id="formula-decoder-13"></a>
+[📖 查看公式附录详解](#formula-decoder-13-detail)
 
 每次只需计算新 token 的 Q, K, V，然后更新缓存。
 
@@ -170,6 +209,9 @@ KV Cache 的内存占用：
 
 $$M_{cache} = 2 \times L \times B \times n_{heads} \times d_{head} \times (n_{ctx} + n_{gen})$$
 
+<a id="formula-decoder-14"></a>
+[📖 查看公式附录详解](#formula-decoder-14-detail)
+
 其中 $L$ 是层数，$B$ 是 batch size。
 
 **公式解释**
@@ -195,6 +237,9 @@ $$M_{cache} = 2 \times L \times B \times n_{heads} \times d_{head} \times (n_{ct
 
 $$\mathcal{L} = -\sum_{t=1}^{T} \log P(x_t | x_{1:t-1})$$
 
+<a id="formula-decoder-15"></a>
+[📖 查看公式附录详解](#formula-decoder-15-detail)
+
 **公式解释**
 - **公式含义**：对每一步的正确 token 概率取对数并求和，取负号得到损失。
 - **变量说明**：$P(x_t | x_{1:t-1})$ 为模型在第 $t$ 步对真实 token 的概率。
@@ -208,6 +253,9 @@ $$\mathcal{L} = -\sum_{t=1}^{T} \log P(x_t | x_{1:t-1})$$
 - **Key, Value** 来自编码器
 
 $$\text{CrossAttention}(Q_d, K_e, V_e) = \text{softmax}\left(\frac{Q_d K_e^T}{\sqrt{d_k}}\right)V_e$$
+
+<a id="formula-decoder-16"></a>
+[📖 查看公式附录详解](#formula-decoder-16-detail)
 
 这允许解码器"查看"编码器的表示。
 
@@ -241,3 +289,4 @@ INT8/INT4 量化减少内存和加速推理。
 3. Radford et al. (2019). *Language Models are Unsupervised Multitask Learners*
 4. Brown et al. (2020). *Language Models are Few-Shot Learners*
 5. Leviathan et al. (2023). *Fast Inference from Transformers via Speculative Decoding*
+

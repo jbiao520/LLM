@@ -1,0 +1,19 @@
+{
+  "name": "llm-learning-guide",
+  "version": "1.0.0",
+  "description": "LLM 学习指南 - 从 Embedding 到推理加速的完整学习路径",
+  "type": "module",
+  "scripts": {
+    "build:pdf": "node scripts/build-pdf.mjs"
+  },
+  "keywords": ["llm", "machine-learning", "deep-learning", "transformer"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^23.0.0",
+    "markdown-it": "^14.0.0",
+    "katex": "^0.16.0",
+    "highlight.js": "^11.9.0",
+    "js-yaml": "^4.1.0"
+  }
+}

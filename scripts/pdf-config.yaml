@@ -1,0 +1,133 @@
+# PDF 构建配置文件
+# LLM 学习指南 - 从 Embedding 到推理加速的完整学习路径
+
+# 书籍信息
+title: "LLM 学习指南"
+subtitle: "从 Embedding 到推理加速的完整学习路径"
+output: "output/LLM学习指南.pdf"
+
+# 样式配置
+style:
+  css: "scripts/templates/ebook.css"
+  line_height: 1.8
+  margin: "25mm"
+
+# 章节配置
+# 每个章节可以包含多个子章节，按顺序合并
+chapters:
+  - id: intro
+    title: "第1章 简介与学习路径"
+    sources:
+      - "topics/README.md"
+
+  - id: embedding
+    title: "第2章 Embedding 嵌入层"
+    sources:
+      - "topics/embedding/README.md"
+      - "topics/embedding/diagram.md"
+    subtopics:
+      - title: "2.1 词嵌入 (Word Embedding)"
+        sources:
+          - "topics/embedding/word-embedding/beginner-guide.md"
+          - "topics/embedding/word-embedding/advanced-guide.md"
+        examples: "topics/embedding/word-embedding/examples"
+      - title: "2.2 位置嵌入 (Position Embedding)"
+        sources:
+          - "topics/embedding/position-embedding/beginner-guide.md"
+          - "topics/embedding/position-embedding/advanced-guide.md"
+        examples: "topics/embedding/position-embedding/examples"
+
+  - id: normalization
+    title: "第3章 Normalization 归一化"
+    sources:
+      - "topics/normalization/beginner-guide.md"
+      - "topics/normalization/advanced-guide.md"
+      - "topics/normalization/diagram.md"
+    examples: "topics/normalization/examples"
+
+  - id: activation
+    title: "第4章 Activation 激活函数"
+    sources:
+      - "topics/activation/beginner-guide.md"
+      - "topics/activation/advanced-guide.md"
+      - "topics/activation/diagram.md"
+    examples: "topics/activation/examples"
+
+  - id: attention
+    title: "第5章 Attention 注意力机制"
+    sources:
+      - "topics/attention/beginner-guide.md"
+      - "topics/attention/advanced-guide.md"
+      - "topics/attention/diagram.md"
+    examples: "topics/attention/examples"
+
+  - id: ffn
+    title: "第6章 FFN 前馈网络层"
+    sources:
+      - "topics/ffn/beginner-guide.md"
+      - "topics/ffn/advanced-guide.md"
+      - "topics/ffn/diagram.md"
+    examples: "topics/ffn/examples"
+
+  - id: encoder
+    title: "第7章 Encoder 编码器"
+    sources:
+      - "topics/encoder/beginner-guide.md"
+      - "topics/encoder/advanced-guide.md"
+      - "topics/encoder/diagram.md"
+    examples: "topics/encoder/examples"
+
+  - id: decoder
+    title: "第8章 Decoder 解码器"
+    sources:
+      - "topics/decoder/beginner-guide.md"
+      - "topics/decoder/advanced-guide.md"
+      - "topics/decoder/diagram.md"
+    examples: "topics/decoder/examples"
+
+  - id: moe
+    title: "第9章 MoE 混合专家模型"
+    sources:
+      - "topics/moe/beginner-guide.md"
+      - "topics/moe/advanced-guide.md"
+      - "topics/moe/diagram.md"
+    examples: "topics/moe/examples"
+
+  - id: fine-tuning
+    title: "第10章 Fine-tuning 微调技术"
+    sources:
+      - "topics/fine-tuning/README.md"
+    subtopics:
+      - title: "10.1 全量微调 (Full Fine-tuning)"
+        sources:
+          - "topics/fine-tuning/full-finetune/beginner-guide.md"
+          - "topics/fine-tuning/full-finetune/advanced-guide.md"
+          - "topics/fine-tuning/full-finetune/diagram.md"
+        examples: "topics/fine-tuning/full-finetune/examples"
+      - title: "10.2 LoRA 微调"
+        sources:
+          - "topics/fine-tuning/lora-finetune/beginner-guide.md"
+          - "topics/fine-tuning/lora-finetune/advanced-guide.md"
+          - "topics/fine-tuning/lora-finetune/diagram.md"
+        examples: "topics/fine-tuning/lora-finetune/examples"
+
+  - id: quantization
+    title: "第11章 Quantization 模型量化"
+    sources:
+      - "topics/inference/quantization/beginner-guide.md"
+      - "topics/inference/quantization/advanced-guide.md"
+      - "topics/inference/quantization/diagram.md"
+    examples: "topics/inference/quantization/examples"
+
+  - id: inference-acceleration
+    title: "第12章 Inference Acceleration 推理加速"
+    sources:
+      - "topics/inference/inference-acceleration/beginner-guide.md"
+      - "topics/inference/inference-acceleration/advanced-guide.md"
+      - "topics/inference/inference-acceleration/diagram.md"
+    examples: "topics/inference/inference-acceleration/examples"
+
+  - id: formula-appendix
+    title: "附录：公式详解"
+    sources:
+      - "topics/formula-appendix.md"

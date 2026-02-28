@@ -18,6 +18,9 @@ LLM 推理的核心挑战：
 
 $$\text{Attention}(Q_t, K_{1:t}, V_{1:t})$$
 
+<a id="formula-inference-acceleration-1"></a>
+[📖 查看公式附录详解](#formula-inference-acceleration-1-detail)
+
 **公式解释**
 - **公式含义**：生成第 $t$ 个 token 时，需要当前查询 $Q_t$ 与所有历史键值 $K_{1:t}, V_{1:t}$ 计算注意力。
 - **变量说明**：$Q_t$ 为当前位置的查询向量；$K_{1:t}, V_{1:t}$ 为从位置 1 到 $t$ 的键值序列。
@@ -30,6 +33,9 @@ KV Cache 存储 $K_{1:t-1}$ 和 $V_{1:t-1}$，避免重复计算。
 对于 $L$ 层、$h$ 头、$d_{head}$ 维度、序列长度 $s$：
 
 $$\text{KV Cache} = 2 \times L \times h \times d_{head} \times s \times \text{bytes}$$
+
+<a id="formula-inference-acceleration-2"></a>
+[📖 查看公式附录详解](#formula-inference-acceleration-2-detail)
 
 **公式解释**
 - **公式含义**：KV Cache 大小与层数、头数、每头维度、序列长度成正比。
@@ -89,6 +95,9 @@ iteration_4: [req1, req4]        # 新请求 req4 加入
 ### 标准注意力
 
 $$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d}}\right) V$$
+
+<a id="formula-inference-acceleration-3"></a>
+[📖 查看公式附录详解](#formula-inference-acceleration-3-detail)
 
 **公式解释**
 - **公式含义**：计算 Q 与 K 的相似度，缩放后 softmax 得到权重，再对 V 加权求和。
@@ -219,3 +228,4 @@ llm = LLM(
 1. Kwon et al. (2023). *Efficient Memory Management for Large Language Model Serving with PagedAttention*
 2. Dao et al. (2022). *FlashAttention: Fast and Memory-Efficient Exact Attention*
 3. NVIDIA (2023). *TensorRT-LLM: High-Performance Inference*
+

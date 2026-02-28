@@ -8,6 +8,9 @@
 
 $$\hat{W} = Q(W) = s \cdot \text{clamp}\left(\text{round}\left(\frac{W}{s}\right), -2^{b-1}, 2^{b-1}-1\right)$$
 
+<a id="formula-quantization-1"></a>
+[📖 查看公式附录详解](#formula-quantization-1-detail)
+
 **公式解释**
 - **公式含义**：将浮点数除以缩放因子、四舍五入、截断到目标范围，再乘回复原。
 - **变量说明**：$s$ 为缩放因子（scale）；$b$ 为目标位宽；$\text{round}$ 为舍入；$\text{clamp}$ 为截断到 $[-2^{b-1}, 2^{b-1}-1]$。
@@ -26,7 +29,13 @@ $$\hat{W} = Q(W) = s \cdot \text{clamp}\left(\text{round}\left(\frac{W}{s}\right
 
 $$s = \frac{\max(|W|)}{2^{b-1}}$$
 
+<a id="formula-quantization-2"></a>
+[📖 查看公式附录详解](#formula-quantization-2-detail)
+
 $$Q(x) = s \cdot \text{round}\left(\frac{x}{s}\right)$$
+
+<a id="formula-quantization-3"></a>
+[📖 查看公式附录详解](#formula-quantization-3-detail)
 
 **公式解释**
 - **公式含义**：缩放因子由最大绝对值决定，量��范围关于 0 对称。
@@ -40,9 +49,18 @@ $$Q(x) = s \cdot \text{round}\left(\frac{x}{s}\right)$$
 
 $$s = \frac{\max(W) - \min(W)}{2^b - 1}$$
 
+<a id="formula-quantization-4"></a>
+[📖 查看公式附录详解](#formula-quantization-4-detail)
+
 $$z = \text{round}\left(-\frac{\min(W)}{s}\right)$$
 
+<a id="formula-quantization-5"></a>
+[📖 查看公式附录详解](#formula-quantization-5-detail)
+
 $$Q(x) = s \cdot (\text{round}(x/s) + z)$$
+
+<a id="formula-quantization-6"></a>
+[📖 查看公式附录详解](#formula-quantization-6-detail)
 
 **公式解释**
 - **公式含义**：缩放因子由值域范围决定，引入零点偏移 $z$ 适配非对称分布。
@@ -70,6 +88,9 @@ GPTQ (Frantar et al., 2023) 基于 Optimal Brain Quantization，逐层量化权�
 
 $$\arg\min_{\hat{W}} \|WX - \hat{W}X\|^2$$
 
+<a id="formula-quantization-7"></a>
+[📖 查看公式附录详解](#formula-quantization-7-detail)
+
 **公式解释**
 - **公式含义**：寻找量化后的���重 $\hat{W}$，使其输出与原始权重 $W$ 的输出尽可能接近。
 - **变量说明**：$W$ 为原始权重；$\hat{W}$ 为量化后权重；$X$ 为输入激活；$\|\cdot\|^2$ 为 L2 范数平方。
@@ -83,6 +104,9 @@ $$\arg\min_{\hat{W}} \|WX - \hat{W}X\|^2$$
 2. **计算误差**：$\delta_i = w_i - \hat{w}_i$
 3. **更新未量化的权重**：
    $$W_{[:, i+1:]} \leftarrow W_{[:, i+1:]} - \frac{\delta_i \cdot (X_i^T X_{[i+1:]})}{X_i^T X_i + \epsilon}$$
+
+<a id="formula-quantization-8"></a>
+[📖 查看公式附录详解](#formula-quantization-8-detail)
 
 **公式解释**
 - **公式含义**：将当前列的量化误差通过 Hessian 逆矩阵传播到后续未量化的列。
@@ -130,6 +154,9 @@ AWQ (Lin et al., 2023) 发现：**只有 1% 的权重对模型输出影响最大
 
 $$\hat{W} = Q(W \cdot s) \cdot s^{-1}$$
 
+<a id="formula-quantization-9"></a>
+[📖 查看公式附录详解](#formula-quantization-9-detail)
+
 **公式解释**
 - **公式含义**：先对权重做缩放，量化后再逆向缩放，使重要权重获得更高精度。
 - **变量说明**：$W$ 为原始权重；$s$ 为每通道缩放因子；$Q(\cdot)$ 为量化函数；$s^{-1}$ 为逐元素除法。
@@ -138,6 +165,9 @@ $$\hat{W} = Q(W \cdot s) \cdot s^{-1}$$
 其中 $s$ 是每通道的缩放因子，基于激活值分布计算：
 
 $$s_i = \max(|X_i|)^\alpha, \quad \alpha \in [0, 1]$$
+
+<a id="formula-quantization-10"></a>
+[📖 查看公式附录详解](#formula-quantization-10-detail)
 
 **公式解释**
 - **公式含义**：缩放因子由激活值的幅值决定，激活越大的通道权重越重要。
@@ -253,3 +283,4 @@ quant_config = {
 1. Frantar et al. (2023). *GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers*
 2. Lin et al. (2023). *AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration*
 3. Xiao et al. (2023). *SmoothQuant: Accurate and Efficient Post-Training Quantization*
+

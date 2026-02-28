@@ -8,6 +8,9 @@
 
 $$f: V \rightarrow \mathbb{R}^d$$
 
+<a id="formula-word-embedding-1"></a>
+[📖 查看公式附录详解](#formula-word-embedding-1-detail)
+
 **公式解释**
 - **公式含义**：将词汇表中的每个词映射到一个 $d$ 维实数向量。
 - **变量说明**：$V$ 为词汇表（离散符号集合）；$\mathbb{R}^d$ 为 $d$ 维实数向量空间。
@@ -29,6 +32,9 @@ $$f: V \rightarrow \mathbb{R}^d$$
 
 $$\frac{1}{T} \sum_{t=1}^{T} \sum_{-c \leq j \leq c, j \neq 0} \log p(w_{t+j} | w_t)$$
 
+<a id="formula-word-embedding-2"></a>
+[📖 查看公式附录详解](#formula-word-embedding-2-detail)
+
 **公式解释**
 - **公式含义**：用中心词预测上下文词，最大化所有位置的对数概率之和。
 - **变量说明**：$T$ 为序列长度；$c$ 为上下文窗口大小；$p(w_{t+j} | w_t)$ 为用中心词预测上下文词的概率。
@@ -39,6 +45,9 @@ $$\frac{1}{T} \sum_{t=1}^{T} \sum_{-c \leq j \leq c, j \neq 0} \log p(w_{t+j} | 
 使用 softmax 定义条件概率：
 
 $$p(w_o | w_i) = \frac{\exp(v_{w_o}^T v_{w_i})}{\sum_{w=1}^{W} \exp(v_w^T v_{w_i})}$$
+
+<a id="formula-word-embedding-3"></a>
+[📖 查看公式附录详解](#formula-word-embedding-3-detail)
 
 **公式解释**
 - **公式含义**：用两个词向量的点积计算相似度，再经 softmax 归一化为概率。
@@ -52,6 +61,9 @@ $$p(w_o | w_i) = \frac{\exp(v_{w_o}^T v_{w_i})}{\sum_{w=1}^{W} \exp(v_w^T v_{w_i
 原始 softmax 计算量太大（需要遍历整个词表）。负采样将其转化为二分类问题：
 
 $$\log p(w_o | w_i) = \log \sigma(v_{w_o}^T v_{w_i}) + \sum_{k=1}^{K} \mathbb{E}_{w_k \sim P_n(w)} [\log \sigma(-v_{w_k}^T v_{w_i})]$$
+
+<a id="formula-word-embedding-4"></a>
+[📖 查看公式附录详解](#formula-word-embedding-4-detail)
 
 **公式解释**
 - **公式含义**：正样本（真实上下文）概率最大化 + 负样本（噪声词）概率最小化。
@@ -68,6 +80,9 @@ $$\log p(w_o | w_i) = \log \sigma(v_{w_o}^T v_{w_i}) + \sum_{k=1}^{K} \mathbb{E}
 CBOW (Continuous Bag of Words) 与 Skip-gram 相反：用上下文预测中心词。
 
 $$p(w_t | \text{context}) = \frac{\exp(v_{w_t}^T \cdot \bar{v}_{\text{context}})}{\sum_{w=1}^{W} \exp(v_w^T \cdot \bar{v}_{\text{context}})}$$
+
+<a id="formula-word-embedding-5"></a>
+[📖 查看公式附录详解](#formula-word-embedding-5-detail)
 
 **公式解释**
 - **公式含义**：用上下文词向量的平均来预测中心词的概率分布。
@@ -93,6 +108,9 @@ GloVe (Global Vectors) 结合了全局矩阵分解和局部上下文窗口方法
 
 $$J = \sum_{i,j=1}^{V} f(X_{ij}) (w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log X_{ij})^2$$
 
+<a id="formula-word-embedding-6"></a>
+[📖 查看公式附录详解](#formula-word-embedding-6-detail)
+
 **公式解释**
 - **公式含义**：让词向量的点积 + 偏置逼近共现次数的对数。
 - **变量说明**：$X_{ij}$ 为词 $i$ 和 $j$ 的共现次数；$w_i, \tilde{w}_j$ 为中心词和上下文词向量；$f(X_{ij})$ 为权重函数。
@@ -106,6 +124,9 @@ $$J = \sum_{i,j=1}^{V} f(X_{ij}) (w_i^T \tilde{w}_j + b_i + \tilde{b}_j - \log X
 
 $$f(x) = \begin{cases} (x/x_{\max})^\alpha & \text{if } x < x_{\max} \\ 1 & \text{otherwise} \end{cases}$$
 
+<a id="formula-word-embedding-7"></a>
+[📖 查看公式附录详解](#formula-word-embedding-7-detail)
+
 **公式解释**
 - **公式含义**：对低频共现给予较小权重，高频共现权重封顶为 1。
 - **变量说明**：$x_{\max}$ 为截断阈值；$\alpha$ 为幂次参数（通常 0.75）。
@@ -117,6 +138,9 @@ $$f(x) = \begin{cases} (x/x_{\max})^\alpha & \text{if } x < x_{\max} \\ 1 & \tex
 
 $$\text{sim}(w_1, w_2) = \frac{v_{w_1} \cdot v_{w_2}}{\|v_{w_1}\| \|v_{w_2}\|}$$
 
+<a id="formula-word-embedding-8"></a>
+[📖 查看公式附录详解](#formula-word-embedding-8-detail)
+
 **公式解释**
 - **公式含义**：用两个向量的夹角余弦值衡量相似度，范围 $[-1, 1]$。
 - **变量说明**：$v_{w_1}, v_{w_2}$ 为两个词的向量；$\|\cdot\|$ 为向量模长。
@@ -127,6 +151,9 @@ $$\text{sim}(w_1, w_2) = \frac{v_{w_1} \cdot v_{w_2}}{\|v_{w_1}\| \|v_{w_2}\|}$$
 词嵌入可以捕捉语义类比关系：
 
 $$\vec{v}_{king} - \vec{v}_{man} + \vec{v}_{woman} \approx \vec{v}_{queen}$$
+
+<a id="formula-word-embedding-9"></a>
+[📖 查看公式附录详解](#formula-word-embedding-9-detail)
 
 **公式解释**
 - **公式含义**：词向量空间中的线性运算可表示语义类比关系。
@@ -162,3 +189,4 @@ $$\vec{v}_{king} - \vec{v}_{man} + \vec{v}_{woman} \approx \vec{v}_{queen}$$
 2. Mikolov et al. (2013). *Distributed Representations of Words and Phrases and their Compositionality*
 3. Pennington et al. (2014). *GloVe: Global Vectors for Word Representation*
 4. Goldberg & Levy (2014). *word2vec Explained: Deriving Mikolov et al.'s Negative-Sampling Word-Embedding Method*
+

@@ -12,6 +12,9 @@ Position-wise Feed-Forward Network 是 Transformer 中的关键组件，负责�
 
 $$\text{FFN}(x) = \text{GELU}(xW_1 + b_1)W_2 + b_2$$
 
+<a id="formula-ffn-1"></a>
+[📖 查看公式附录详解](#formula-ffn-1-detail)
+
 **公式解释**
 - **公式含义**：先升维到 $d_{ff}$，经 GELU 激活后再降维回 $d_{model}$。
 - **变量说明**：$x$ 为输入向量；$W_1, W_2$ 为权重矩阵；$b_1, b_2$ 为偏置；GELU 为激活函数。
@@ -28,6 +31,9 @@ $$\text{FFN}(x) = \text{GELU}(xW_1 + b_1)W_2 + b_2$$
 
 $$\text{FFN}(X)_{i,:} = \text{FFN}(X_{i,:})$$
 
+<a id="formula-ffn-2"></a>
+[📖 查看公式附录详解](#formula-ffn-2-detail)
+
 **公式解释**
 - **公式含义**：序列中每个位置的向量独立通过同一个 FFN 变换。
 - **变量说明**：$X_{i,:}$ 为第 $i$ 个位置的向量；$\text{FFN}(X)_{i,:}$ 为其变换后输出。
@@ -41,6 +47,9 @@ $$\text{FFN}(X)_{i,:} = \text{FFN}(X_{i,:})$$
 
 $$P_{FFN} = 2 \times d_{model} \times d_{ff} + d_{model} + d_{ff}$$
 
+<a id="formula-ffn-3"></a>
+[📖 查看公式附录详解](#formula-ffn-3-detail)
+
 **公式解释**
 - **公式含义**：FFN 参数量 = 两个权重矩阵 + 两个偏置向量。
 - **变量说明**：$d_{model}$ 为输入/输出维度；$d_{ff}$ 为中间隐藏维度（通常 $4d$）。
@@ -49,6 +58,9 @@ $$P_{FFN} = 2 \times d_{model} \times d_{ff} + d_{model} + d_{ff}$$
 对于 $d_{model} = 768$，$d_{ff} = 3072$：
 
 $$P_{FFN} = 2 \times 768 \times 3072 + 768 + 3072 = 4,722,432$$
+
+<a id="formula-ffn-4"></a>
+[📖 查看公式附录详解](#formula-ffn-4-detail)
 
 **公式解释**
 - **公式含义**：代入具体数值计算 BERT-Base 每层 FFN 的参数量。
@@ -60,6 +72,9 @@ $$P_{FFN} = 2 \times 768 \times 3072 + 768 + 3072 = 4,722,432$$
 ### ReLU
 
 $$\text{FFN}_{ReLU}(x) = \max(0, xW_1)W_2$$
+
+<a id="formula-ffn-5"></a>
+[📖 查看公式附录详解](#formula-ffn-5-detail)
 
 **公式解释**
 - **公式含义**：用 ReLU 激活，将负值截断为 0。
@@ -73,6 +88,9 @@ $$\text{FFN}_{ReLU}(x) = \max(0, xW_1)W_2$$
 
 $$\text{FFN}_{GELU}(x) = \text{GELU}(xW_1)W_2$$
 
+<a id="formula-ffn-6"></a>
+[📖 查看公式附录详解](#formula-ffn-6-detail)
+
 **公式解释**
 - **公式含义**：用 GELU 替代 ReLU，在 0 附近更平滑。
 - **变量说明**：GELU 为高斯误差线性单元，与正态分布 CDF 相关。
@@ -85,6 +103,9 @@ $$\text{FFN}_{GELU}(x) = \text{GELU}(xW_1)W_2$$
 ### Swish/SiLU
 
 $$\text{FFN}_{Swish}(x) = (xW_1 \odot \sigma(xW_1))W_2$$
+
+<a id="formula-ffn-7"></a>
+[📖 查看公式附录详解](#formula-ffn-7-detail)
 
 **公式解释**
 - **公式含义**：用 Swish 激活，输入与 sigmoid 门控的乘积。
@@ -100,6 +121,9 @@ $$\text{FFN}_{Swish}(x) = (xW_1 \odot \sigma(xW_1))W_2$$
 
 $$\text{GLU}(x) = (xW) \odot \sigma(xV)$$
 
+<a id="formula-ffn-8"></a>
+[📖 查看公式附录详解](#formula-ffn-8-detail)
+
 **公式解释**
 - **公式含义**：两个并行线性变换，一个作为门控信号控制另一个。
 - **变量说明**：$W, V$ 为两组权重；$\sigma(xV)$ 为门控值（0-1）；$\odot$ 为逐元素乘。
@@ -111,6 +135,9 @@ $$\text{GLU}(x) = (xW) \odot \sigma(xV)$$
 
 $$\text{SwiGLU}(x) = \text{Swish}(xW) \odot (xV)$$
 
+<a id="formula-ffn-9"></a>
+[📖 查看公式附录详解](#formula-ffn-9-detail)
+
 **公式解释**
 - **公式含义**：用 Swish 替代 Sigmoid 作为门控激活。
 - **变量说明**：$\text{Swish}(x) = x \cdot \sigma(x)$；$W, V$ 为两组权重。
@@ -120,11 +147,17 @@ $$\text{SwiGLU}(x) = \text{Swish}(xW) \odot (xV)$$
 
 $$\text{SwiGLU}(x) = (xW \odot \sigma(xW)) \odot (xV)$$
 
+<a id="formula-ffn-10"></a>
+[📖 查看公式附录详解](#formula-ffn-10-detail)
+
 LLaMA 等现代 LLM 使用。
 
 ### GeGLU
 
 $$\text{GeGLU}(x) = \text{GELU}(xW) \odot (xV)$$
+
+<a id="formula-ffn-11"></a>
+[📖 查看公式附录详解](#formula-ffn-11-detail)
 
 **公式解释**
 - **公式含义**：用 GELU 替代 Sigmoid 作为门控激活。
@@ -221,3 +254,4 @@ Attention 主要是线性操作（加权求和），FFN 提供非线性。
 2. Shazeer (2020). *GLU Variants Improve Transformer*
 3. Geva et al. (2021). *Transformer Feed-Forward Layers Are Key-Value Memories*
 4. Tolstikhin et al. (2021). *MLP-Mixer: An all-MLP Architecture for Vision*
+
