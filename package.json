@@ -6,14 +6,20 @@
   "scripts": {
     "build:pdf": "node scripts/build-pdf.mjs"
   },
-  "keywords": ["llm", "machine-learning", "deep-learning", "transformer"],
+  "keywords": [
+    "llm",
+    "machine-learning",
+    "deep-learning",
+    "transformer"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "puppeteer": "^23.0.0",
-    "markdown-it": "^14.0.0",
-    "katex": "^0.16.0",
     "highlight.js": "^11.9.0",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "katex": "^0.16.0",
+    "markdown-it": "^14.0.0",
+    "pdf-lib": "^1.17.1",
+    "puppeteer": "^23.0.0"
   }
 }

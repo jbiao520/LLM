@@ -127,7 +127,3 @@ chapters:
       - "topics/inference/inference-acceleration/diagram.md"
     examples: "topics/inference/inference-acceleration/examples"
 
-  - id: formula-appendix
-    title: "附录：公式详解"
-    sources:
-      - "topics/formula-appendix.md"

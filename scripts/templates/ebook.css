@@ -258,23 +258,53 @@ hr {
   border-bottom: none;
 }
 
-.toc ul {
+.toc > ul {
   list-style: none;
   padding-left: 0;
+  margin-top: 20pt;
 }
 
 .toc li {
-  margin-bottom: 10pt;
+  margin-bottom: 12pt;
   font-size: 12pt;
+  line-height: 1.5;
 }
 
 .toc a {
   color: #333;
+  text-decoration: none;
 }
 
-/* 目录章节标题 */
+/* 目录章节标题 - 主章节 */
 .toc-chapter {
   font-weight: bold;
+  font-size: 13pt;
+  margin-top: 16pt;
+  margin-bottom: 8pt;
+  color: #1a1a1a;
+}
+
+/* 子章节缩进 */
+.toc ul ul {
+  padding-left: 24pt;
+  margin-top: 4pt;
+  margin-bottom: 8pt;
+}
+
+.toc ul ul li {
+  font-size: 11pt;
+  margin-bottom: 8pt;
+  color: #555;
+}
+
+/* 二级子章节进一步缩进 */
+.toc ul ul ul {
+  padding-left: 20pt;
+}
+
+.toc ul ul ul li {
+  font-size: 10pt;
+  color: #666;
 }
 
 /* === 代码附录样式 === */
